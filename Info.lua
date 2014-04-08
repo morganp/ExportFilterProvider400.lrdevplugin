@@ -15,8 +15,8 @@ of it requires the prior written permission of Adobe.
 ------------------------------------------------------------------------------]]
 
 return {
-  LrSdkVersion        = 5.0,
-  LrSdkMinimumVersion = 5.0, -- minimum SDK version required by this plugin
+  LrSdkVersion        = 3.0,
+  LrSdkMinimumVersion = 1.3, -- minimum SDK version required by this plugin
 
   LrPluginName        = "400x400 Export",
   LrToolkitIdentifier = 'sample.export400x400',
