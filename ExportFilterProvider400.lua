@@ -44,6 +44,8 @@ end
 -- Override export settings with Export Filter
 -- Page 49 to 51 of the SDK guide
 -- http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/photoshoplightroom/pdfs/lr5/lightroom-sdk-guide.pdf
+-- Page 52  For each filter, if a postProcessRenderedPhotos() function is defined, it is called. The function is 
+-- called only once, regardless of the number of photos being exported.
 local function postProcessRenderedPhotos(  functionContext, filterContext )
   -- Optional: If you want to change the render settings for each photo
   -- before Lightroom renders it
