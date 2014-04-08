@@ -15,19 +15,20 @@ of it requires the prior written permission of Adobe.
 ------------------------------------------------------------------------------]]
 
 return {
-
-  LrSdkVersion        = 3.0,
-  LrSdkMinimumVersion = 1.3, -- minimum SDK version required by this plugin
+  LrSdkVersion        = 5.0,
+  LrSdkMinimumVersion = 5.0, -- minimum SDK version required by this plugin
 
   LrPluginName        = "400x400 Export",
   LrToolkitIdentifier = 'sample.export400x400',
   
   LrExportFilterProvider = {
-    title = LOC "$$$/SDK/MetaExportFilter/Sample=400x400 Size", -- the string that appears in the export filter section of the export dialog in LR
-    file  = 'ExportFilterProvider400.lua', -- name of the file containing the filter definition script
+    -- the string that appears in the export filter section
+    -- of the export dialog in LR
+    title = LOC "$$$/SDK/MetaExportFilter/Sample=400x400 Size", 
+    -- name of the file containing the filter definition script
+    file  = 'ExportFilterProvider400.lua', 
     id    = "metadata1",  -- unique identifier for export filter
   },
 
   VERSION = { major=5, minor=0, revision=0, build=907681, },
-
 }

@@ -21,67 +21,66 @@ of it requires the prior written permission of Adobe.
 
 local LrView = import 'LrView'
 local bind   = LrView.bind
+
+--local logger = import 'LrLogger'( 'AnExample' )
+
+-- Creates ~/Documents/myPlugin.log
+local LrLogger = import 'LrLogger'
+local logger   = LrLogger( 'myPlugin' )
+logger:enable( "logfile" )
+logger:info('Required ExportFilterProvider400')
+
+--logger:trace('Test Trace' )
+--logger:info('Test Info'  )
+--logger:warn('Test Warn'  )
+--logger:error('Test Err'   )
 --------------------------------------------------------------------------------
 -- This function will create the section displayed on the export dialog 
 -- when this filter is added to the export session.
-
 local function sectionForFilterInDialog( f, propertyTable )
-  
+  logger:info('Called sectionForFilterInDialog')
   return {
     title = LOC "$$$/SDK/MetaExportFilter/SectionTitle=400x400 Filter",
   }
 end
 
---------------------------------------------------------------------------------
--- Example on updating export settings
--- This preset expot settings for a Export Service
-local function updateExportSettings( exportSettings ) 
-  exportSettings.LR_size_maxHeight = 400
-  exportSettings.LR_size_maxWidth  = 400
-  exportSettings.LR_size_doConstrain = true
-end
 
--- Override export settings with Export Filter
--- Page 49 to 51 of the SDK guide
--- http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/photoshoplightroom/pdfs/lr5/lightroom-sdk-guide.pdf
--- Page 52  For each filter, if a postProcessRenderedPhotos() function is defined, it is called. The function is 
--- called only once, regardless of the number of photos being exported.
-local function postProcessRenderedPhotos(  functionContext, filterContext )
-  -- Optional: If you want to change the render settings for each photo
-  -- before Lightroom renders it
+--------------------------------------------------------------------------------
+-- -- Example on updating export settings
+-- -- This preset export settings for a Export Service
+-- local function updateExportSettings( exportSettings ) 
+--   exportSettings.LR_size_maxHeight = 400
+--   exportSettings.LR_size_maxWidth  = 400
+--   exportSettings.LR_size_doConstrain = true
+-- end
+
+
+local function postProcessRenderedPhotos( functionContext, filterContext )
+  logger:info('postProcessRenderedPhotos start')  
+
   local renditionOptions = {
     filterSettings = function( renditionToSatisfy, exportSettings )
+      logger:info('renditionOptions'  )  
       exportSettings.LR_size_maxHeight = 400
       exportSettings.LR_size_maxWidth  = 400
       exportSettings.LR_size_doConstrain = true
-      return os.tmpname()
-    end,
+    end
   }
-  for sourceRendition, renditionToSatisfy in filterContext:renditions( 
-    renditionOptions ) do
+
+  for sourceRendition, renditionToSatisfy in filterContext:renditions( renditionOptions ) do
+    logger:info('sourceRendition start')  
+
     -- Wait for the upstream task to finish its work on this photo. 
     local success, pathOrMessage = sourceRendition:waitForRender()
-    --if success then 
-    --  -- Now that the photo is completed and available to this filter,
-    --  -- you can do your work on the photo here.
-    --  -- It would look somethinglike this: 
-    --  -- local status = LrTasks.execute( 'mytool "' .. pathOrMessage .. '"' )
-    --  local status = 1
-    --  -- use something like this to signal a failure for this rendition only: 
-    --  -- (Replace "error message" with a user-readable string explaining why
-    --  -- the photo failed to render.)
-    --  if status ~= (desired status) then
-    --    renditionToSatisfy:renditionIsDone( false, "error message" )
-    --  end
+    
+    logger:info('sourceRendition finish')  
   end
+  logger:info('postProcessRenderedPhotos finish')  
 end
-
 --------------------------------------------------------------------------------
 
 return {
-sectionForFilterInDialog  = sectionForFilterInDialog,
-updateExportSettings      = updateExportSettings    , --Does this works
-postProcessRenderedPhotos = postProcessRenderedPhotos,
+  sectionForFilterInDialog  = sectionForFilterInDialog,
+  postProcessRenderedPhotos = postProcessRenderedPhotos,
 }
 
---ExportFilterProvider
